@@ -19,14 +19,19 @@ app.use("/", async (req, res) => {
 
     const headers = {};
     upstreamRes.headers.forEach((value, key) => {
-      if (!["content-security-policy", "x-frame-options", "content-security-policy-report-only"].includes(key.toLowerCase())) {
+      const lowerKey = key.toLowerCase();
+      // Strip security headers
+      if (
+        lowerKey !== "content-security-policy" &&
+        lowerKey !== "x-frame-options" &&
+        lowerKey !== "content-security-policy-report-only"
+      ) {
         headers[key] = value;
       }
     });
 
-    // ✅ Force headers to allow iframe embedding in Genesys
-    headers["content-security-policy"] = "frame-ancestors 'self' https://apps.mypurecloud.com;";
-    headers["x-frame-options"] = "ALLOW-FROM https://apps.mypurecloud.com";
+    // ✅ Allow Genesys iframe embedding via CSP
+    headers["Content-Security-Policy"] = "frame-ancestors 'self' https://apps.mypurecloud.com";
 
     res.status(upstreamRes.status).set(headers).send(body);
   } catch (error) {
