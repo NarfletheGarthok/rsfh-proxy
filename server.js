@@ -31,7 +31,7 @@ app.use("/", async (req, res) => {
     });
 
     // ✅ Allow Genesys iframe embedding via CSP
-    headers["Content-Security-Policy"] = "frame-ancestors 'self' https://apps.mypurecloud.com";
+    headers["Content-Security-Policy"] = "frame-ancestors 'self' https://apps.usw2.pure.cloud";
 
     res.status(upstreamRes.status).set(headers).send(body);
   } catch (error) {
